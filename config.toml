@@ -1,0 +1,4 @@
+baseurl = "https://example.com"
+languageCode = "en-us"
+title = "ArtWar"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT", "404"]

@@ -1,0 +1,16 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.4/css/nanogallery2.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.4/jquery.nanogallery2.min.js"></script>
+<style>
+  body {
+    background-color: #191919;
+  }
+</style>
+{{ $nanogallery2_settings := getJSON "/static/ng2_gallery_settings.json" | jsonify}}
+
+<div id="my_nanogallery2" data-nanogallery2="{{$nanogallery2_settings}}">
+  {{range $index, $image := sort (.Site.GetPage "/home").Resources}}
+    {{ $.Scratch.Set "thumbnail" ($image.Resize "x400 q90") }}
+    <a href="{{ $image.RelPermalink }}" data-ngthumb="{{ ($.Scratch.Get "thumbnail").RelPermalink }}"></a>
+  {{ end }}
+</div>
