@@ -15,7 +15,7 @@
 </div>
 
 {{$images := slice }}
-{{range $index, $image := sort (.Site.GetPage "/home").Resources}}
+{{range $index, $image := sort ((.Site.GetPage "/home").Resources.ByType "image" ) "Name" "desc" }}
     {{ $.Scratch.Set "thumbnail" ($image.Resize "x400 q90") }}
     {{ $item := (dict "src" $image.RelPermalink) }}
     {{ $item := merge $item (dict "srct"  ($.Scratch.Get "thumbnail").RelPermalink)}}
