@@ -1,16 +1,59 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.4/css/nanogallery2.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/nanogallery2/3.0.4/jquery.nanogallery2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/css/nanogallery2.min.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/nanogallery2@3/dist/jquery.nanogallery2.min.js"></script>
+
+<link rel="shortcut icon" href="/fav/favicon.ico" />
+<link rel="icon" type="image/png" href="/fav/favicon16x16.png" sizes="16x16">
+<link rel="icon" type="image/png" href="/fav/favicon32x32.png" sizes="32x32">
 <style>
   body {
-    background-color: #191919;
+    background-color: #fff;
   }
 </style>
-{{ $nanogallery2_settings := getJSON "/static/ng2_gallery_settings.json" | jsonify}}
 
-<div id="my_nanogallery2" data-nanogallery2="{{$nanogallery2_settings}}">
-  {{range $index, $image := sort (.Site.GetPage "/home").Resources}}
-    {{ $.Scratch.Set "thumbnail" ($image.Resize "x400 q90") }}
-    <a href="{{ $image.RelPermalink }}" data-ngthumb="{{ ($.Scratch.Get "thumbnail").RelPermalink }}"></a>
-  {{ end }}
+<div id="gallery">
 </div>
+
+{{$images := slice }}
+{{range $index, $image := sort (.Site.GetPage "/home").Resources}}
+    {{ $.Scratch.Set "thumbnail" ($image.Resize "x400 q90") }}
+    {{ $item := (dict "src" $image.RelPermalink) }}
+    {{ $item := merge $item (dict "srct"  ($.Scratch.Get "thumbnail").RelPermalink)}}
+    {{ $images = $images | append $item}}
+{{ end }}
+<script>
+  const images = JSON.parse("{{ $images | jsonify }}")
+
+  $(document).ready(function () {
+    $("#gallery").nanogallery2({
+      "thumbnailWidth":   400,
+     "thumbnailHeight":  "auto",
+     "viewerToolbar":   {
+        "display":    false,
+        "standard":   "minimizeButton, label",
+        "minimized":  "minimizeButton, label, fullscreenButton, downloadButton, infoButton"
+      },
+      "viewerTools":     {
+        "topLeft":    "",
+        "topRight":   "shareButton, fullscreenButton, closeButton"
+      },  
+     "thumbnailLabel": { 
+         "display": false 
+     },
+     "thumbnailAlignment":"fillWidth",
+     "thumbnailBuildInit2": "image_scale_1.15",
+     "thumbnailHoverEffect2": "thumbnail_scale_1.00_1.05_300|image_scale_1.15_1.00",
+     "touchAnimation": true,
+     "touchAutoOpenDelay": 500,
+     "thumbnailBorderHorizontal" : 0,
+     "thumbnailBorderVertical" : 0,
+     "thumbnailL1BorderVertical": 0,
+     "thumbnailL1BorderHorizontal" : 0,
+     "galleryTheme" : { 
+        "thumbnail": { "background": "#111" }
+      },
+      items: images
+});
+  });
+</script>
+
