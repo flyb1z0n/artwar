@@ -1,4 +1,4 @@
-baseurl = "https://flyb1z0n.github.io/artwar/"
+baseurl = "https://artwar.in.ua"
 languageCode = "en-us"
 title = "ArtWar"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT", "404"]
